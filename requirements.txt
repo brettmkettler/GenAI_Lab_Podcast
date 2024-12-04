@@ -1,0 +1,9 @@
+
+python-dotenv==1.0.1
+elevenlabs
+groq
+pydub
+youtube-transcript-api
+mutagen
+streamlit
+PyPDF2
