@@ -9,7 +9,6 @@ import generate_script_grok_xai
 import combine
 from pydub import AudioSegment
 
-# Load environment variables and setup PDF reader
 try:
     import PyPDF2
     pdf_reader = PyPDF2.PdfReader
@@ -17,12 +16,11 @@ except ImportError:
     try:
         from pypdf import PdfReader as pdf_reader
     except ImportError:
-        st.error("Please install PyPDF2 or pypdf")
+        st.error("Please install PyPDF2 or pypdf using: pip install PyPDF2 or pip install pypdf")
         st.stop()
 
 load_dotenv()
 
-# Initialize session state
 if 'script_content' not in st.session_state:
     st.session_state.script_content = ""
 if 'generated_audio' not in st.session_state:
@@ -30,13 +28,15 @@ if 'generated_audio' not in st.session_state:
 if 'intro_music_path' not in st.session_state:
     st.session_state.intro_music_path = "IntroCapgemini.mp3"
 
-# Setup output directory
 output_dir = "audio_segments"
 os.makedirs(output_dir, exist_ok=True)
 
 def read_pdf(pdf_file):
     reader = pdf_reader(pdf_file)
-    return "\n".join(page.extract_text() for page in reader.pages)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() + "\n"
+    return text
 
 def read_txt(txt_file):
     return txt_file.getvalue().decode("utf-8")
@@ -113,6 +113,14 @@ def convert_text_to_speech(script_content, voice_ids):
                     segment += 1
 
     return audio_files
+
+def cleanup_audio_segments():
+    for file in os.listdir(output_dir):
+        if file.endswith('.mp3'):
+            try:
+                os.remove(os.path.join(output_dir, file))
+            except Exception as e:
+                print(f"Error removing file {file}: {e}")
 
 def main():
     st.title("GenAI Lab - Podcast Generator (Grok X.AI)")
@@ -191,7 +199,7 @@ def main():
         host1_voice_id = st.text_input("Host 1 Voice ID", value="7eFTSJ6WtWd9VCU4ZlI1")
         host1_name = st.text_input("Host 1 Name", value="Brett Kettler")
         host1_bio = st.text_area("Host 1 Bio", 
-            value="He works in the Generative AI Laboratory with Robert Engels and Mark Roberts at Capgemini. ")
+            value="He is the husband of Kimber and works in the Generative AI Laboratory with Robert Engels and Mark Roberts")
         host1_personality = st.text_area("Host 1 Personality Traits", 
             value="Dry sense of humor, loves to talk about AI, is pro anthropomorphic AI, and is not very ethical about it, likes to bring up robotics as well.")
         
@@ -248,6 +256,8 @@ def main():
             
             if st.button("Generate Podcast"):
                 if st.session_state.api_key:
+                    cleanup_audio_segments()
+                    
                     voice_ids = {
                         host1_name: host1_voice_id,
                         host2_name: host2_voice_id
