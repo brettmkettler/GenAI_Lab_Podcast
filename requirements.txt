@@ -7,3 +7,4 @@ youtube-transcript-api
 mutagen
 streamlit
 PyPDF2
+pydub
