@@ -9,7 +9,7 @@ import generate_script_grok_xai
 import combine
 from pydub import AudioSegment
 
-# Try to import PyPDF2, if not available, try pypdf
+# Load environment variables and setup PDF reader
 try:
     import PyPDF2
     pdf_reader = PyPDF2.PdfReader
@@ -17,13 +17,12 @@ except ImportError:
     try:
         from pypdf import PdfReader as pdf_reader
     except ImportError:
-        st.error("Please install PyPDF2 or pypdf using: pip install PyPDF2 or pip install pypdf")
+        st.error("Please install PyPDF2 or pypdf")
         st.stop()
 
-# Load environment variables
 load_dotenv()
 
-# Initialize session state variables
+# Initialize session state
 if 'script_content' not in st.session_state:
     st.session_state.script_content = ""
 if 'generated_audio' not in st.session_state:
@@ -31,40 +30,50 @@ if 'generated_audio' not in st.session_state:
 if 'intro_music_path' not in st.session_state:
     st.session_state.intro_music_path = "IntroCapgemini.mp3"
 
-# Directory to store temporary audio files
+# Setup output directory
 output_dir = "audio_segments"
 os.makedirs(output_dir, exist_ok=True)
 
 def read_pdf(pdf_file):
     reader = pdf_reader(pdf_file)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
+    return "\n".join(page.extract_text() for page in reader.pages)
 
 def read_txt(txt_file):
     return txt_file.getvalue().decode("utf-8")
 
 def extract_youtube_transcript(video_url):
     try:
-        if "youtube.com" in video_url:
-            video_id = video_url.split("v=")[1].split("&")[0]
-        elif "youtu.be" in video_url:
-            video_id = video_url.split("/")[-1]
+        if "youtube.com/watch?v=" in video_url:
+            video_id = video_url.split("watch?v=")[1].split("&")[0]
+        elif "youtu.be/" in video_url:
+            video_id = video_url.split("youtu.be/")[1].split("?")[0]
+        elif "youtube.com/v/" in video_url:
+            video_id = video_url.split("youtube.com/v/")[1].split("?")[0]
+        elif "youtube.com/embed/" in video_url:
+            video_id = video_url.split("youtube.com/embed/")[1].split("?")[0]
         else:
-            return "Invalid YouTube URL"
+            st.error("Invalid YouTube URL format")
+            return None
 
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        return " ".join([entry['text'] for entry in transcript])
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id)
+            if transcript:
+                return " ".join([entry['text'] for entry in transcript])
+            st.error("No transcript available for this video")
+            return None
+        except Exception as e:
+            st.error(f"Could not get transcript: {str(e)}")
+            return None
+            
     except Exception as e:
-        return f"Error extracting transcript: {str(e)}"
+        st.error(f"Error processing YouTube URL: {str(e)}")
+        return None
 
 def convert_text_to_speech(script_content, voice_ids):
     audio_files = []
     segment = 0
 
-    lines = script_content.split('\n')
-    for i, line in enumerate(lines):
+    for line in script_content.split('\n'):
         if not line.strip():
             continue
             
@@ -72,7 +81,6 @@ def convert_text_to_speech(script_content, voice_ids):
         if match:
             speaker, action, text = match.groups()
             text = text.strip().strip('"')
-
             if action:
                 text = f"({action}) " + text
 
@@ -134,15 +142,15 @@ def main():
         intro_music_option = st.radio(
             "Choose Intro Music Option",
             ["Use Default Intro", "Upload Custom Intro"],
-            help="Default intro is 'IntroCapgemini.mp3"
+            help="Default intro is 'IntroCapgemini.mp3'"
         )
         
         if intro_music_option == "Upload Custom Intro":
-            uploaded_intro = st.file_uploader("Upload Intro Music", type=['mp3', 'wav'])
+            uploaded_intro = st.file_uploader("Upload Intro Music", type=['mp3'])
             if uploaded_intro:
-                with open(f"custom_intro.{uploaded_intro.name.split('.')[-1]}", "wb") as f:
+                with open(f"custom_intro.mp3", "wb") as f:
                     f.write(uploaded_intro.getbuffer())
-                st.session_state.intro_music_path = f"custom_intro.{uploaded_intro.name.split('.')[-1]}"
+                st.session_state.intro_music_path = "custom_intro.mp3"
                 st.success("Custom intro music uploaded successfully!")
         else:
             st.session_state.intro_music_path = "IntroCapgemini.mp3"
@@ -155,22 +163,22 @@ def main():
         st.divider()
         
         st.subheader("Reference Materials")
-        st.markdown("##### Document Upload")
-        uploaded_file = st.file_uploader("Upload TXT or PDF file", type=['txt', 'pdf'])
         
+        uploaded_file = st.file_uploader("Upload TXT or PDF file", type=['txt', 'pdf'])
         if uploaded_file:
-            if uploaded_file.type == "application/pdf":
-                document_content = read_pdf(uploaded_file)
-            else:
-                document_content = read_txt(uploaded_file)
+            document_content = read_pdf(uploaded_file) if uploaded_file.type == "application/pdf" else read_txt(uploaded_file)
             st.session_state.document_content = document_content
             
-        st.markdown("##### YouTube Reference")
         youtube_url = st.text_input("Enter YouTube Video URL", 
             help="The transcript will be extracted and used as additional reference material")
         
         if youtube_url:
-            st.session_state.youtube_transcript = extract_youtube_transcript(youtube_url)
+            transcript = extract_youtube_transcript(youtube_url)
+            if transcript:
+                st.session_state.youtube_transcript = transcript
+                st.success("Successfully extracted YouTube transcript")
+                st.write("Transcript preview (first 500 characters):")
+                st.write(transcript[:500] + "...")
     
     with tab2:
         st.header("Host Configuration")
@@ -183,7 +191,7 @@ def main():
         host1_voice_id = st.text_input("Host 1 Voice ID", value="7eFTSJ6WtWd9VCU4ZlI1")
         host1_name = st.text_input("Host 1 Name", value="Brett Kettler")
         host1_bio = st.text_area("Host 1 Bio", 
-            value="He is the husband of Kimber and works in the Generative AI Laboratory with Robert Engels and Mark Roberts")
+            value="He works in the Generative AI Laboratory with Robert Engels and Mark Roberts at Capgemini. ")
         host1_personality = st.text_area("Host 1 Personality Traits", 
             value="Dry sense of humor, loves to talk about AI, is pro anthropomorphic AI, and is not very ethical about it, likes to bring up robotics as well.")
         
@@ -195,11 +203,13 @@ def main():
             value="Curious about AI and the world, loves to ask questions")
         
         if st.button("Generate Script"):
+            research_content = ""
             if 'document_content' in st.session_state:
-                research_content = st.session_state.document_content
-                if 'youtube_transcript' in st.session_state:
-                    research_content += "\n" + st.session_state.youtube_transcript
-                
+                research_content += st.session_state.document_content + "\n"
+            if 'youtube_transcript' in st.session_state:
+                research_content += st.session_state.youtube_transcript
+
+            if research_content:
                 if not all([host1_name, host1_bio, host1_personality, 
                            host2_name, host2_bio, host2_personality]):
                     st.error("Please fill in all host information before generating the script.")
@@ -207,7 +217,10 @@ def main():
                 
                 with st.spinner("Generating podcast script..."):
                     try:
-                        topic = "Discussion of the newsletter content"
+                        topic = episode_topic if episode_topic else "Discussion of the content"
+                        research_content = (research_content + "\n\nAdditional Details: " + 
+                                         additional_details if additional_details else research_content)
+                        
                         st.session_state.script_content = generate_script_grok_xai.generate_response(
                             topic=topic,
                             relevant_docs=research_content,
