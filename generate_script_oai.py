@@ -6,6 +6,8 @@ from openai import OpenAI
 # Load environment variables
 load_dotenv()
 
+
+
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -37,7 +39,7 @@ def generate_response(topic, relevant_docs, host1_name, host1_bio, host1_persona
                 {host1_name} and {host2_name}. The conversation should be extremely casual conversation with a lot of back and forth.
                 They will talk back and forth and make it very natural speech.
 
-                Create a 5 minute podcast script for the next episode of "The AI Experiment" where {host1_name} and {host2_name} discuss the topics below:
+                Create a 15 minute podcast script for the next episode of "AI Futures Lab Visionary Bytes" where {host1_name} and {host2_name} discuss the topics below:
 
                 {topic}
 

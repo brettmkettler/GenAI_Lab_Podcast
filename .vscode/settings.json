@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/88731d58-dff4-4629-a4f1-0b2b22afd65d/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/genai-podcast",
+    "appService.deploySubpath": "."
+}

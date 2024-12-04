@@ -15,7 +15,7 @@ import requests
 import io
 from youtube_transcript_api import YouTubeTranscriptApi
 from dotenv import load_dotenv
-import generate_script_oai
+import generate_script_grok_xai
 import combine
 
 # Try to import PyPDF2, if not available, try pypdf
@@ -113,7 +113,7 @@ def convert_text_to_speech(script_content, voice_ids):
     return audio_files
 
 def main():
-    st.title("AI Podcast Generator")
+    st.title("GenAI Lab - Podcast Generator (Grok X.AI)")
     
     # Create tabs
     tab1, tab2 = st.tabs(["Content Input", "Host Configuration"])
@@ -196,7 +196,7 @@ def main():
                     try:
                         # Generate script using updated generate_script_oai function
                         topic = "Discussion of the newsletter content"
-                        st.session_state.script_content = generate_script_oai.generate_response(
+                        st.session_state.script_content = generate_script_grok_xai.generate_response(
                             topic=topic,
                             relevant_docs=research_content,
                             host1_name=host1_name,
