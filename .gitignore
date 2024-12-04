@@ -34,7 +34,7 @@ venv/
 
 # Local environment files
 .env.local
-.env
+# .env
 
 # Generated files
 podcast_script.txt

@@ -28,7 +28,7 @@ API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
 # Define the voice IDs for each host
 voice_ids = {
-    "Brett": "JSGwt4dfzg0ANnLeNSUH",  # Replace with Brett's voice_id
+    "Brett": "7eFTSJ6WtWd9VCU4ZlI1",  # Replace with Brett's voice_id
     "Kimber": "fQ74DTbwd8TiAJFxu9v8"  # Replace with Kimber's voice_id
 }
 

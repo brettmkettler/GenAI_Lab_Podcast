@@ -96,10 +96,12 @@ def convert_text_to_speech(script_content, voice_ids):
                     },
                     json={
                         "text": text,
+                        "model_id": "eleven_multilingual_v2", 
                         "voice_settings": {
-                            "stability": 0.1,
-                            "similarity_boost": 0.3,
-                            "style": 0.2
+                            "stability": 0.5,
+                            "similarity_boost": 1.0,
+                            "style": 0.0,
+                            "use_speaker_boost": True
                         }
                     }
                 )
