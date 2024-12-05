@@ -45,7 +45,7 @@ def generate_response(topic, relevant_docs, host1_name, host1_bio, host1_persona
                     Bio: {host2_bio}
                     Personality: {host2_personality}
 
-                    DO NOT USE ** OR ANY OTHER MARKUP IN THE SCRIPT.
+                    DO NOT USE MARKUP IN THE SCRIPT.
                     """
                 },
                 {
@@ -82,7 +82,7 @@ def generate_response(topic, relevant_docs, host1_name, host1_bio, host1_persona
                     [{host1_name}] - "Text to be spoken."
                     [{host2_name}] - "Text to be spoken."
 
-                    DO NOT USE ** OR ANY OTHER MARKUP IN THE SCRIPT.
+                    Use this exact format for the script.
                     """
                 }
             ],
