@@ -45,44 +45,44 @@ def generate_response(topic, relevant_docs, host1_name, host1_bio, host1_persona
                     Bio: {host2_bio}
                     Personality: {host2_personality}
 
-                    DO NOT USE MARKUP IN THE SCRIPT.
+                    IMPORTANT FORMATTING RULES:
+                    1. DO NOT USE ANY MARKUP like **, __, or other special characters
+                    2. DO NOT USE PARENTHESES FOR ACTIONS
+                    3. ONLY USE PLAIN TEXT IN THE DIALOGUE
+                    4. FOLLOW THE EXACT FORMAT SHOWN BELOW
                     """
                 },
                 {
                     "role": "user",
                     "content": f"""
-                    You are writing a Podcast type of general discussion between two hosts, 
-                    {host1_name} and {host2_name}. The conversation should be extremely casual conversation with a lot of back and forth.
-                    They will talk back and forth and make it very natural speech.
+                    Write a natural, casual podcast conversation between {host1_name} and {host2_name}.
+                    The conversation should flow naturally with lots of back and forth dialogue.
 
-                    Create a 15 minute podcast script for the next episode of "AI Futures Lab Visionary Bytes" where {host1_name} and {host2_name} discuss the topics below with as much detail as possible:
-
+                    TOPIC:
                     {topic}
 
-                    Here are some relevant research documents to consider:
+                    REFERENCE MATERIALS:
                     {relevant_docs}
 
-                    CONSIDERATIONS:
-                    - Keep the conversation responses short and concise and more back and forth.
-                    - Keep the conversation engaging and informative.
-                    - Make speakers laugh by saying "ha hahaha" or "haha", DO NOT USE (laughs)
-                    - They can say "um" or "uh" or "hmm" if thinking or pausing.
-                    - They can ask each other questions or make comments about things they find interesting.
-                    - They can make jokes or puns.
-                    - They can use casual language or slang.
-                    - They can interrupt each other.
-                    - They can agree or disagree with each other.
+                    CONVERSATION STYLE:
+                    - Keep responses short and conversational
+                    - Use natural speech patterns
+                    - Include casual reactions like "hmm", "oh", "yeah"
+                    - Show laughter with "haha" or "ha ha"
+                    - Allow for interruptions and overlapping dialogue
+                    - Mix in questions and comments
+                    - Keep it engaging and informative
+                    - Use casual language and slang when appropriate
 
-                    RESPONSES:
-                    - They can respond in one or 5 word sentences and make the script longer if needed.
-                    - Include natural conversational interjections like "oh" or "yeah" are fine.
-                    - Do a full deep dive and analysis of the topic with back and forth conversation.
+                    SCRIPT FORMAT:
+                    [{host1_name}] - "Spoken text here"
+                    [{host2_name}] - "Spoken text here"
 
-                    FORMAT FOR THE SCRIPT:
-                    [{host1_name}] - "Text to be spoken."
-                    [{host2_name}] - "Text to be spoken."
-
-                    Use this exact format for the script.
+                    IMPORTANT:
+                    1. DO NOT USE ** or any other markup characters
+                    2. DO NOT USE (parentheses) for actions
+                    3. ONLY USE PLAIN TEXT in the dialogue
+                    4. EXACTLY follow the format above with square brackets and quotes
                     """
                 }
             ],

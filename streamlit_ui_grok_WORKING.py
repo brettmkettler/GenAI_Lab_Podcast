@@ -15,7 +15,7 @@ import requests
 import io
 from youtube_transcript_api import YouTubeTranscriptApi
 from dotenv import load_dotenv
-import generate_script_oai
+import generate_script_grok_xai
 import combine
 
 # Try to import PyPDF2, if not available, try pypdf
@@ -52,20 +52,36 @@ def read_pdf(pdf_file):
 def read_txt(txt_file):
     return txt_file.getvalue().decode("utf-8")
 
+
 def extract_youtube_transcript(video_url):
     try:
-        # Extract video ID from URL
-        if "youtube.com" in video_url:
-            video_id = video_url.split("v=")[1].split("&")[0]
-        elif "youtu.be" in video_url:
-            video_id = video_url.split("/")[-1]
+        if "youtube.com/watch?v=" in video_url:
+            video_id = video_url.split("watch?v=")[1].split("&")[0]
+        elif "youtu.be/" in video_url:
+            video_id = video_url.split("youtu.be/")[1].split("?")[0]
+        elif "youtube.com/v/" in video_url:
+            video_id = video_url.split("youtube.com/v/")[1].split("?")[0]
+        elif "youtube.com/embed/" in video_url:
+            video_id = video_url.split("youtube.com/embed/")[1].split("?")[0]
         else:
-            return "Invalid YouTube URL"
+            st.error("Invalid YouTube URL format")
+            return None
 
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
-        return " ".join([entry['text'] for entry in transcript])
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id)
+            if transcript:
+                return " ".join([entry['text'] for entry in transcript])
+            st.error("No transcript available for this video")
+            return None
+        except Exception as e:
+            st.error(f"Could not get transcript: {str(e)}")
+            return None
+            
     except Exception as e:
-        return f"Error extracting transcript: {str(e)}"
+        st.error(f"Error processing YouTube URL: {str(e)}")
+        return None
+    
+    
 
 def convert_text_to_speech(script_content, voice_ids):
     audio_files = []
@@ -96,10 +112,12 @@ def convert_text_to_speech(script_content, voice_ids):
                     },
                     json={
                         "text": text,
+                        "model_id": "eleven_multilingual_v2", 
                         "voice_settings": {
-                            "stability": 0.1,
-                            "similarity_boost": 0.3,
-                            "style": 0.2
+                            "stability": 0.5,
+                            "similarity_boost": 1.0,
+                            "style": 0.0,
+                            "use_speaker_boost": True
                         }
                     }
                 )
@@ -113,7 +131,7 @@ def convert_text_to_speech(script_content, voice_ids):
     return audio_files
 
 def main():
-    st.title("AI Podcast Generator")
+    st.title("GenAI Lab - Podcast Generator (Grok X.AI)")
     
     # Create tabs
     tab1, tab2 = st.tabs(["Content Input", "Host Configuration"])
@@ -157,7 +175,16 @@ def main():
         st.markdown("##### YouTube Reference")
         youtube_url = st.text_input("Enter YouTube Video URL", 
             help="The transcript will be extracted and used as additional reference material")
-    
+        
+        if youtube_url:
+            transcript = extract_youtube_transcript(youtube_url)
+            if transcript:
+                st.session_state.youtube_transcript = transcript
+                st.success("Successfully extracted YouTube transcript")
+                st.write("Transcript preview (first 500 characters):")
+                st.write(transcript[:500] + "...")
+                
+                
     with tab2:
         st.header("Host Configuration")
         
@@ -169,15 +196,15 @@ def main():
         host1_voice_id = st.text_input("Host 1 Voice ID", value="7eFTSJ6WtWd9VCU4ZlI1")
         host1_name = st.text_input("Host 1 Name", value="Brett Kettler")
         host1_bio = st.text_area("Host 1 Bio", value="He is the husband of Kimber and works in the Generative AI Laboratory with Robert Engels and Mark Roberts")
-        host1_personality = st.text_area("Host 1 Personality Traits", value="Dry sense of humor, loves to talk about AI")
+        host1_personality = st.text_area("Host 1 Personality Traits", value="Dry sense of humor, loves to talk about AI, is pro anthropomorphic AI, and is not very ethical about it, likes to bring up robotics as well.")
         
         # Host 2 Configuration
         st.subheader("Host 2 Configuration")
-        host2_voice_id = st.text_input("Host 2 Voice ID", value="fQ74DTbwd8TiAJFxu9v8")
-        host2_name = st.text_input("Host 2 Name", value="Kimber Kettler")
-        host2_bio = st.text_area("Host 2 Bio", value="Kimber is the wife of Brett and teaches yoga.")
-        host2_personality = st.text_area("Host 2 Personality Traits", value="Curious about AI and the world, loves to ask questions")
-        
+        host2_voice_id = st.text_input("Host 2 Voice ID", value="hHbb7TYETnc6FfIoFjTt")
+        host2_name = st.text_input("Host 2 Name", value="Robert Engels")
+        host2_bio = st.text_area("Host 2 Bio", value="Robert is the CTO AI ♠️ Head of Capgemini AI Lab | Vice President. That's quite a bunch of titles and abbreviations, sorry for that. It's probably what you collect when being occupied over years with things you enjoy and like to do. For me the CTIO title brings that together, with Innovation at the front, but where would Innovation be without Technology. And as we increasingly understand: technology and innovation are depending on information. And if you have no data, what do you base information on? But also: if you have data, but cannot abstract from it, relate it to models of the world and how everything is related, what can you then reach? What are the limits? Or should you aim higher? (no need to say I think we should, The role of Vice President and CTIO for AI in our great Global Business Line Insights and Data, with a focus on Innovation for and with Artificial intelligence, Contextual Knowledge and Sustainability is really about combining a lifelong interest in Psychology, Computer Science, Business Economics and: Agroforestry & Agriculture. When technology meets people the fun starts, and that's where I´d want to be. Utilizing, explaining, producing and creating scenario's, solutions and understanding for new challenges and situations where AI & ML come around the corner.")
+        host2_personality = st.text_area("Host 2 Personality Traits", value="Very passionate about AI, Professional, Funny, and a bit of a joker, likes to talk about the future of AI and how it will impact the world for the better.")
+
         # Generate Script Button
         if st.button("Generate Script"):
             if 'document_content' in st.session_state:
@@ -196,7 +223,7 @@ def main():
                     try:
                         # Generate script using updated generate_script_oai function
                         topic = "Discussion of the newsletter content"
-                        st.session_state.script_content = generate_script_oai.generate_response(
+                        st.session_state.script_content = generate_script_grok_xai.generate_response(
                             topic=topic,
                             relevant_docs=research_content,
                             host1_name=host1_name,
