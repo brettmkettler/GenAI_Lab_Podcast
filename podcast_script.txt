@@ -1,45 +1,47 @@
-[Brett Kettler] - "So, Kim, did you catch any of the AI news from Microsoft Ignite last week?"
+[Brett Kettler] - "Alright, so let's dive into Technovision 2024, huh? This year's a bit different, right?"
 
-[Kimber Kettler] - "Yeah, I saw some stuff about Copilot, right? It's all getting pretty intense."
+[Kimber Kettler] - "Oh, yeah? What's new?"
 
-[Brett Kettler] - "Haha, intense is putting it mildly. They're really pushing the boundaries with these AI agents. Did you know they're now allowing users to create autonomous agents?"
+[Brett Kettler] - "We've got this chatbot now. You don't even have to read the report anymore."
 
-[Kimber Kettler] - "Really? That's wild. Like, robots doing our work for us?"
+[Kimber Kettler] - "Haha, that sounds like cheating!"
 
-[Brett Kettler] - "Well, not exactly robots, but yeah, AI doing tasks on our behalf. It's like having a digital assistant that doesn't just suggest, but actually acts."
+[Brett Kettler] - "Nah, it's more about testing new tech. We're pushing boundaries, you know?"
 
-[Kimber Kettler] - "Hmm, that sounds useful but also a bit scary. What if it makes a mistake?"
+[Kimber Kettler] - "So, what's the big trend you're excited about?"
 
-[Brett Kettler] - "There's always that risk, but they're working on making these systems more reliable. Like, remember the Be My AI app I told you about?"
+[Brett Kettler] - "When Code Goes No. That's my favorite."
 
-[Kimber Kettler] - "Oh, for people with vision impairments?"
+[Kimber Kettler] - "When what now?"
 
-[Brett Kettler] - "Exactly. It's using AI to describe images, helping them navigate the world better. It's pretty cool, actually."
+[Brett Kettler] - "When Code Goes No. It's about moving from no-code to low-code, to actually not needing to code at all. You interact with tech in natural language."
 
-[Kimber Kettler] - "Yeah, it is. But what about the ethics of all this? Like, are we getting too close to making AI too human-like?"
+[Kimber Kettler] - "Huh, that sounds like magic."
 
-[Brett Kettler] - "That's a good point. There's this whole debate about anthropomorphizing AI. Some argue it's a strength, others say it's a limitation."
+[Brett Kettler] - "It's not magic, it's AI, babe. It's about speed and agility for developers. They can build stuff faster without the crazy coding structures."
 
-[Kimber Kettler] - "I read something about that in your lab's newsletter. Isn't there a risk of us over-relying on AI because we think it's like us?"
+[Kimber Kettler] - "So, it's like, you think it, and it happens?"
 
-[Brett Kettler] - "Spot on. It's about understanding that AI doesn't 'think' like us. It's pattern recognition, not reasoning."
+[Brett Kettler] - "Sort of, yeah. It's a game-changer for tech innovation."
 
-[Kimber Kettler] - "So, we shouldn't expect it to make decisions like a human would?"
+[Kimber Kettler] - "And what's the point of Technovision this year then?"
 
-[Brett Kettler] - "Right. We need to focus on how AI can collaborate with us, not imitate us. It's a tool, not a replacement for human judgment."
+[Brett Kettler] - "It's a companion guide to help you strategize around technology and innovation. We've got 10 new technologies and trends to focus on."
 
-[Kimber Kettler] - "Makes sense. But with all these advancements, where do you think we're heading?"
+[Kimber Kettler] - "Only 10?"
 
-[Brett Kettler] - "Well, I'm pretty excited about the hybrid AI approach. Combining different models to tackle those persistent issues like factual accuracy and reasoning."
+[Brett Kettler] - "Yeah, we keep it light so you don't feel overwhelmed. And we're introducing two new principles to make sure you've got a framework to work with."
 
-[Kimber Kettler] - "Hybrid AI? Like, mixing AI with other tech?"
+[Kimber Kettler] - "Sounds like a lot of work!"
 
-[Brett Kettler] - "Yeah, exactly. It's like taking the best parts of different AI systems and non-AI models to make something more robust. It's the future, Kim."
+[Brett Kettler] - "It's about aligning your enterprise, your organization, your stakeholders to a new vision. That's what gets me excited."
 
-[Kimber Kettler] - "Sounds like you're all in on this AI stuff, huh?"
+[Kimber Kettler] - "I see, so it's not just about the tech, but how you use it to bring value to customers?"
 
-[Brett Kettler] - "Ha ha, you know me, always the AI enthusiast. But hey, it's fascinating, and I think it's going to change the world in ways we can't even imagine yet."
+[Brett Kettler] - "Exactly. That's the whole point. Tech should serve, not just exist."
 
-[Kimber Kettler] - "Can't wait to see what you guys come up with next at the lab!"
+[Kimber Kettler] - "Makes sense. So, when can I chat with this Technovision chatbot?"
 
-[Brett Kettler] - "We'll keep you posted, for sure."
+[Brett Kettler] - "It's live now, go ahead and give it a spin. Ask it anything about the trends or technologies."
+
+[Kimber Kettler] - "Alright, I'm on it. Let's see how smart this bot is."
